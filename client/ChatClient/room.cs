@@ -22,7 +22,6 @@ namespace ChatClient
             this.port = port;
             this.connectionRoom = new Connection();
             this.Connected = false;
-            this.connectionRoom.WhichRoom = this ;
         }
 
 

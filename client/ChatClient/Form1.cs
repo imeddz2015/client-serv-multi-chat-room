@@ -24,7 +24,12 @@ namespace ChatClient
         private room room5  ;
 
         private room selectedRoom = null;
-         
+
+        /*public Form1(Connection connection)
+        {
+            InitializeComponent();
+            this.connection = connection;
+        }*/
 
         public Form1()
         { 
@@ -63,16 +68,15 @@ namespace ChatClient
 
         private void connectToAllButton_Click(object sender, EventArgs e)
         {
-            connectToRoom(room1,false); // false means do not disconnect connected rooms 
+            connectToRoom(room1,false);
             connectToRoom(room2, false);
             connectToRoom(room3, false);
             connectToRoom(room4, false);
             connectToRoom(room5, false);
         }
 
-        void connectToRoom(room rm, Boolean disconnectifConnected) //disconnectifConnected = true means that if it's connected so disconnect it
+        void connectToRoom(room rm , Boolean disconnectifConnected)
         {
-             
             if (!rm.Connected)
             {
                 Boolean connected = rm.ConnectionRoom.Connect(this, rm.Address, rm.Port, nickNameTextBox.Text);
@@ -87,23 +91,14 @@ namespace ChatClient
                 rm.ConnectionRoom.Disconnect();
                 rm.Connected = false;
                 connectButton.Text = "Connect";
-            } 
+            }
 
             refreshList();
 
         }
-         
-        void disconnectRoom(room rm)
-        {
-            if (rm.Connected)
-            {
-                rm.ConnectionRoom.Disconnect();
-            }
-        }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // get the selected room when click on the list
             int index = listBox1.SelectedIndex;
 
             switch (index)
@@ -137,13 +132,13 @@ namespace ChatClient
             refreshList();
         }
 
-        public void refreshList()
+        void refreshList()
         {
             listBox1.Items.Clear();
 
             string[] myRooms = new string[5];
 
-            myRooms[0] = room1.Name + ConnectedOrNot(room1); // example : room1 (connected)
+            myRooms[0] = room1.Name + ConnectedOrNot(room1);
             myRooms[1] = room2.Name + ConnectedOrNot(room2);
             myRooms[2] = room3.Name + ConnectedOrNot(room3);
             myRooms[3] = room4.Name + ConnectedOrNot(room4);
@@ -164,20 +159,6 @@ namespace ChatClient
         {
 
         }
-
-         
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // make sure that the connections are closed before leaving
-            disconnectRoom(room1);
-            disconnectRoom(room2);
-            disconnectRoom(room3);
-            disconnectRoom(room4);
-            disconnectRoom(room5);
-        }
-
-        
   
 
     }

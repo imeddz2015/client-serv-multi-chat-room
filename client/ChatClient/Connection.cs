@@ -8,7 +8,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ChatClient
 {
@@ -21,14 +20,10 @@ namespace ChatClient
         private BinaryReader _reader;
         private Thread _thread;
 
-        //============================================
-        private room whichRoom = null ;
-        //============================================
-
         public bool Connect(Form1 form, string hostname, int port, string nickname)
         {
             try
-            { 
+            {
                 if (nickname.Length < 3)
                 {
                     OutputText("Longer Nickname required");
@@ -118,18 +113,7 @@ namespace ChatClient
                     {
                         case PacketType.CHATMESSAGE:
                             string message = ((ChatMessagePacket)packet).message;
-
-                            //======================================================================================================================
-                            // we use replace to hide the exit code from the message
-                            OutputText(message.Replace("exitCode:#!254!$", " ")); // this code is just a random code you can choose another one (longer and harder to guess )
-                            if (message.Contains("exitCode:#!254!$")) // if the recieved message contains the exit code it means that the connection was refused 
-                            {
-                                //MessageBox.Show("busy");
-                                WhichRoom.Connected = false;
-                                _form.refreshList();
-                                this.Disconnect();
-                            }
-                            //======================================================================================================================
+                            OutputText(message);
                             break;
                     }
                 }
@@ -142,34 +126,5 @@ namespace ChatClient
         {
             _form.Invoke(new AppendTextDelegate(_form.AppendText), new object[] { text });
         }
-
-        //======================================================================================================================
-        public TcpClient _TcpClient
-        {
-            get
-            {
-                return _tcpClient;
-            }
-            set
-            {
-                _tcpClient = value;
-            }
-        }
-
-      
-
-        public room WhichRoom
-        {
-            get
-            {
-                return whichRoom;
-            }
-            set
-            {
-                whichRoom = value;
-            }
-        }
-
-        //======================================================================================================================
     }
 }

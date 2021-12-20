@@ -21,25 +21,20 @@ namespace SimpleServerCS
         public string NickName { get; private set; }
 
         private Thread thread;
-
-        private string quickResponse = null;
         
-        public Client(Socket socket , string quickResp)
+        public Client(Socket socket)
         {
             Socket = socket;
 
             Stream = new NetworkStream(Socket, true);
             Writer = new BinaryWriter(Stream, Encoding.UTF8);
             Reader = new BinaryReader(Stream, Encoding.UTF8);
-
-            this.quickResponse = quickResp;
         }
 
         public void Start()
         {
             thread = new Thread(new ThreadStart(SocketMethod));
-            thread.Start(); 
-
+            thread.Start();
         }
 
         public void Stop(bool abortThread = false)
@@ -51,7 +46,7 @@ namespace SimpleServerCS
         }
         private void SocketMethod()
         {
-            SimpleServer.SocketMethod(this, quickResponse);
+            SimpleServer.SocketMethod(this);
         }
 
         public void SetNickName(string nickName)
@@ -71,8 +66,6 @@ namespace SimpleServerCS
             ChatMessagePacket chatMessagePacket = new ChatMessagePacket(message);
             Send(chatMessagePacket);
         }
-
-        
 
         public void Send(Packet data)
         {
